@@ -1,4 +1,4 @@
-from turtle import Turtle, Screen, Shape
+from turtle import Turtle, Screen, Shape, Pen
 from random import randint
 
 #screen
@@ -97,8 +97,8 @@ screen.onkeyrelease(R_off, "Up")
 screen.onkeyrelease(R_off, "Down")
 screen.listen()
 # Ball movement
-ball_move_horiz = 15           
-ball_move_vert  = 10
+ball_move_horiz = 18           
+ball_move_vert  = 12
 
 def update_ball_position () :
     global ball_move_horiz, ball_move_vert
@@ -110,7 +110,11 @@ def update_ball_position () :
         ball_move_horiz *= -1
     ball.setx(ball.xcor() + ball_move_horiz)
     ball.sety(ball.ycor() + ball_move_vert)
-    
+
+winscore= Turtle()
+winscore.hideturtle()
+winscore.color("Red")
+
 def check_if_someone_scores() :
     global score_L, score_R
     if (ball.xcor() + ball_radius) >= right :   # right of ball at right of field
@@ -121,7 +125,22 @@ def check_if_someone_scores() :
         score_R += 1
         write_scores()
         reset_ball()
-        
+
+    if score_L == 7:
+        screen.clear()
+        winscore.write("GAME OVER \nPlayer 1 Wins!", align="center", font=("Arial", 45, "bold"))
+        global ball_move_vert, ball_move_horiz
+        ball.setpos(0, 0)
+        speed_horiz = 0
+        speed_vert = 0
+    elif score_R == 7:
+        screen.clear()
+        winscore.write("GAME OVER \nPlayer 2 Wins!", align="center", font=("Arial", 45, "bold"))
+        global ball_move_vert, ball_move_horiz
+        ball.setpos(0, 0)
+        speed_horiz = 0
+        speed_vert = 0
+
 def update_paddle_positions () :
     L_new_y_pos = L.ycor() + (paddle_L_move_direction * paddle_move_vert)
     R_new_y_pos = R.ycor() + (paddle_R_move_direction * paddle_move_vert)
@@ -167,7 +186,7 @@ def frame () :
     update_ball_position()
     screen.update()                 
     screen.ontimer(frame, framerate)
-
+ 
 #start
 write_scores()
 framerate = 40
